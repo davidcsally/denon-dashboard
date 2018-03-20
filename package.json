@@ -1,0 +1,26 @@
+{
+  "name": "denon-dashboard",
+  "version": "0.8",
+  "description": "a dashboard and api for controlling your denon receiver",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "test"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.2",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "eslint": "^4.16.0",
+    "eslint-config-airbnb": "^16.0.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.4.0"
+  }
+}
