@@ -1,11 +1,17 @@
+/**
+ * Power on and set volume to 50
+ */
 const Denon = require('../server/Denon');
 
 const denon = new Denon();
 
 denon.connect();
 denon.command('PWON')
-  .then(() => {
-    setTimeout(() => {
-      process.exit(0);
-    }, 2000);
-  });
+  .then(() => setTimeout(() => {
+    denon.command('MV50')
+      .then(() => {
+        setTimeout(() => {
+          process.exit(0);
+        }, 1500);
+      });
+  }, 1500));
