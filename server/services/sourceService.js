@@ -1,33 +1,33 @@
 /** all the fun sources that we can switch too */
 const sources = {
-  tuner: 'SITUNER',
-  dvd: 'SIDVD',
-  bd: 'SIBD',
-  tv: 'SITBV',
-  sat: 'SISAT/CBL',
-  cbl: 'SISAT/CBL',
-  mplay: 'SISMPLAY',
-  game: 'SIGAME',
-  aux: 'SIAUX1',
-  aux1: 'SIAUX1',
-  net: 'SINET',
-  pandora: 'SIPANDORA',
-  sirius: 'SISIRIUSXM',
-  siriusxm: 'SISIRIUSXM',
-  lastfm: 'SILASTFM',
-  flickr: 'SIFLICKR',
-  favorites: 'SIFAVORITES',
-  iradio: 'SIIRADIO',
-  server: 'SISERVER',
-  'usb/ipod': 'SIUSB/IPOD', // select input
-  usb: 'SIUSB', // select and play playback
-  ipd: 'SIIPD', // ipod direct playback
-  ipod: 'SIIPD', // ipod direct playback
-  iphone: 'SIIPD', // ipod direct playback
-  apple: 'SIIPD', // ipod direct playback
-  irp: 'SIIRP', // select network and start internet radio playback,
-  fvp: 'SIFVP', // select favorites and start playback,
-  status: 'SI?', // return status
+  tuner: 'TUNER',
+  dvd: 'DVD',
+  bd: 'BD',
+  tv: 'TBV',
+  sat: 'SAT/CBL',
+  cbl: 'SAT/CBL',
+  mplay: 'SMPLAY',
+  game: 'GAME',
+  aux: 'AUX1',
+  aux1: 'AUX1',
+  net: 'NET',
+  pandora: 'PANDORA',
+  sirius: 'SIRIUSXM',
+  siriusxm: 'SIRIUSXM',
+  lastfm: 'LASTFM',
+  flickr: 'FLICKR',
+  favorites: 'FAVORITES',
+  iradio: 'IRADIO',
+  server: 'SERVER',
+  'usb/ipod': 'USB/IPOD', // select input
+  usb: 'USB', // select and play playback
+  ipd: 'IPD', // ipod direct playback
+  ipod: 'IPD', // ipod direct playback
+  iphone: 'IPD', // ipod direct playback
+  apple: 'IPD', // ipod direct playback
+  irp: 'IRP', // select network and start internet radio playback,
+  fvp: 'FVP', // select favorites and start playback,
+  status: '?', // return status
 };
 
 /**
@@ -38,6 +38,6 @@ exports.changeSource = (req, res) => {
   const { denon } = res.locals;
   const { source } = req.params;
   const newSource = sources[source];
-  if (newSource) denon.command(newSource);
+  if (newSource) denon.command(`SI${newSource}`);
   res.end();
 };
