@@ -7,5 +7,5 @@ denon.command('PWSTANDBY')
   .then(() => {
     setTimeout(() => {
       process.exit(0);
-    }, 2000);
+    }, 500);
   });
