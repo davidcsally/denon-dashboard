@@ -3,7 +3,7 @@ const sources = {
   tuner: 'TUNER',
   dvd: 'DVD',
   bd: 'BD',
-  tv: 'TBV',
+  tv: 'TV',
   sat: 'SAT/CBL',
   cbl: 'SAT/CBL',
   mplay: 'SMPLAY',
@@ -36,7 +36,7 @@ const sources = {
  */
 exports.changeSource = (req, res) => {
   const { denon } = res.locals;
-  const { source } = req.params;
+  const { source } = req.query;
   const newSource = sources[source];
   if (newSource) denon.command(`SI${newSource}`);
   res.end();
