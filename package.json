@@ -5,14 +5,16 @@
   "main": "index.js",
   "scripts": {
     "on": "node scripts/turnOn.js",
-    "start": "node server/index.js",
+    "start": "nodemon server/index.js",
     "test": "test"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
     "bluebird": "^3.5.1",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.2",
@@ -22,6 +24,7 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.4.0"
+    "eslint-plugin-react": "^7.4.0",
+    "nodemon": "^1.17.2"
   }
 }
