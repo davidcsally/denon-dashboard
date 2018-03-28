@@ -1,3 +1,4 @@
+/* eslint no-unused-expressions: 0 */
 exports.volume = (req, res) => {
   const { denon } = res.locals;
   const { volume } = req.params;
@@ -18,3 +19,12 @@ exports.volumeDown = (req, res) => {
   res.end();
 };
 
+exports.mute = async (req, res) => {
+  const { denon } = res.locals;
+  console.log('hello');
+  const status = await denon.command('MU?');
+  console.log('status:', status);
+
+  status ? denon.command('MUON') : denon.command('MUOFF');
+  res.end();
+};

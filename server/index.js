@@ -7,6 +7,7 @@ const port = 2222;
 
 const denon = new Denon();
 denon.connect();
+// denon.logData();
 
 app.use(
   '/',
