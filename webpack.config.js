@@ -21,8 +21,37 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: ['@babel/preset-env', '@babel/preset-react', 'stage-2'],
+            plugins: [
+              "transform-es2015-modules-commonjs",
+              [
+                "react-css-modules",
+                {
+                  "filetypes": {
+                    ".scss": {
+                      "syntax": "postcss-scss"
+                    }
+                  },
+                  "generateScopedName": "[name]__[local]___[hash:base64:5]"
+                }
+              ]
+            ]
           },
         },
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+        ],
+      },
+      {
+        test: /\.sass$|\.scss$/,
+        use: [
+          'style-loader',
+          'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
+          'sass-loader',
+        ],
       },
     ],
   },
