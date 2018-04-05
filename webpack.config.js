@@ -2,7 +2,8 @@ const path = require('path');
 
 module.exports = {
   mode: 'development',
-  entry: './client/src/index.js',
+  entry: ['babel-polyfill',
+    './client/src/index.js'],
   output: {
     path: path.join(__dirname, '/client/dist'),
     filename: 'bundle.js',
@@ -16,25 +17,29 @@ module.exports = {
       // ES2015+ code to make it browser friendly.
       {
         test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', '@babel/preset-react', 'stage-2'],
+            presets: [
+              '@babel/preset-env',
+              '@babel/preset-react',
+              'stage-0',
+            ],
             plugins: [
-              "transform-es2015-modules-commonjs",
+              'transform-es2015-modules-commonjs',
               [
-                "react-css-modules",
+                'react-css-modules',
                 {
-                  "filetypes": {
-                    ".scss": {
-                      "syntax": "postcss-scss"
-                    }
+                  filetypes: {
+                    '.scss': {
+                      syntax: 'postcss-scss',
+                    },
                   },
-                  "generateScopedName": "[name]__[local]___[hash:base64:5]"
-                }
-              ]
-            ]
+                  generateScopedName: '[name]__[local]___[hash:base64:5]',
+                },
+              ],
+            ],
           },
         },
       },
