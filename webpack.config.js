@@ -1,16 +1,51 @@
 const path = require('path');
+const webpack = require('webpack');
+const { resolve } = require('path');
 
 module.exports = {
   mode: 'development',
-  entry: ['babel-polyfill',
-    './client/src/index.js'],
+  entry: [
+    'babel-polyfill',
+    'react-hot-loader/patch',
+    'webpack-dev-server/client?http://localhost:8080',
+    'webpack/hot/only-dev-server',
+    './src',
+  ],
   output: {
-    path: path.join(__dirname, '/client/dist'),
+    path: path.join(__dirname, '/dist'),
     filename: 'bundle.js',
   },
-  resolve: {
-    extensions: ['*', '.js', '.jsx'],
+  devServer: {
+    contentBase: resolve(__dirname, 'dist'),
+    publicPath: '/dist',
+    hot: true,
+    noInfo: false,
+    stats: { colors: true },
+    historyApiFallback: true,
   },
+  resolve: {
+    extensions: ['.js'],
+  },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    // new WebpackNotifierPlugin({
+    //   contentImage: path.join(__dirname, 'assets', 'imgs', 'favicon', 'favicon-196x196.png'),
+    //   excludeWarnings: true,
+    // }),
+    // new HtmlWebpackPlugin({
+    //   title: 'Medcircle',
+    //   hash: true,
+    //   filename: 'index.html',
+    //   minify: {
+    //     collapseWhitespace: true,
+    //     removeComments: true,
+    //     removeRedundantAttributes: true,
+    //     removeScriptTypeAttributes: true,
+    //     removeStyleLinkTypeAttributes: true,
+    //   },
+    //   template: path.join(__dirname, 'index.html'),
+    // }),
+  ],
   module: {
     rules: [
       // Loads JS files and enables us to transpile our JSX /
@@ -18,30 +53,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              '@babel/preset-env',
-              '@babel/preset-react',
-              'stage-0',
-            ],
-            plugins: [
-              'transform-es2015-modules-commonjs',
-              [
-                'react-css-modules',
-                {
-                  filetypes: {
-                    '.scss': {
-                      syntax: 'postcss-scss',
-                    },
-                  },
-                  generateScopedName: '[name]__[local]___[hash:base64:5]',
-                },
-              ],
-            ],
-          },
-        },
+        use: ['babel-loader'],
       },
       {
         test: /\.css$/,
@@ -56,6 +68,7 @@ module.exports = {
           'style-loader',
           'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
           'sass-loader',
+          'postcss-loader',
         ],
       },
     ],
