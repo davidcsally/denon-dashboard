@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { RaisedButton, Slider } from 'material-ui';
-
+import { debounce } from 'lodash';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
 import { mute, volume } from '../../api';
+import './App.scss';
 
 const style = {
   margin: 12,
@@ -16,8 +16,10 @@ class App extends Component {
     super();
     this.state = {
       isMuted: false,
-      volume,
+      volumeLevel: 50,
     };
+
+    this.slideVolume = debounce(this.slideVolume, 100);
   }
 
   toggleMute = async () => {
@@ -25,18 +27,29 @@ class App extends Component {
     this.setState({ isMuted: result.mute });
   }
 
-  toggleVolume = async () => {
-    const result = await volume();
-    this.setState({ volume: results.volume });
+  slideVolume = async (event, value) => {
+    console.log('slideVolume');
+    const result = await volume(value);
+    this.setState({ volumeLevel: result.volume });
   }
 
   render() {
-    const { isMuted } = this.state;
-    const { toggleMute } = this;
+    const { isMuted, volumeLevel } = this.state;
+    const { toggleMute, slideVolume } = this;
     return (
       <>
+        <p styleName="text"> hello! there </p>
         <MuiThemeProvider>
           <RaisedButton label={isMuted ? 'On' : 'Mute'} primary style={style} onClick={toggleMute} />
+        </MuiThemeProvider>
+        <MuiThemeProvider>
+          <Slider
+            defaultValue={volumeLevel}
+            onChange={slideVolume}
+            min={0}
+            max={100}
+            styleName="slider"
+          />
         </MuiThemeProvider>
       </>
     );
