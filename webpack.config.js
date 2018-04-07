@@ -1,16 +1,29 @@
+/* eslint-disable global-require */
 const path = require('path');
+const webpack = require('webpack');
+const WebpackNotifierPlugin = require('webpack-notifier');
+const merge = require('webpack-merge');
 
-module.exports = {
-  mode: 'development',
-  entry: ['babel-polyfill',
-    './client/src/index.js'],
+const env = process.env.NODE_ENV;
+
+const common = {
+  // context: __dirname,
   output: {
-    path: path.join(__dirname, '/client/dist'),
+    path: path.join(__dirname, '/dist'),
     filename: 'bundle.js',
   },
+  entry: [
+    'babel-polyfill',
+    './src',
+  ],
   resolve: {
-    extensions: ['*', '.js', '.jsx'],
+    extensions: ['.js'],
   },
+  plugins: [
+    new WebpackNotifierPlugin({
+      excludeWarnings: true,
+    }),
+  ],
   module: {
     rules: [
       // Loads JS files and enables us to transpile our JSX /
@@ -18,47 +31,26 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              '@babel/preset-env',
-              '@babel/preset-react',
-              'stage-0',
-            ],
-            plugins: [
-              'transform-es2015-modules-commonjs',
-              [
-                'react-css-modules',
-                {
-                  filetypes: {
-                    '.scss': {
-                      syntax: 'postcss-scss',
-                    },
-                  },
-                  generateScopedName: '[name]__[local]___[hash:base64:5]',
-                },
-              ],
-            ],
-          },
-        },
-      },
-      {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader',
-        ],
-      },
-      {
-        test: /\.sass$|\.scss$/,
-        use: [
-          'style-loader',
-          'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
-          'sass-loader',
-        ],
+        use: { loader: 'babel-loader' },
       },
     ],
   },
 };
+
+const merged = conf => merge(common, conf);
+
+console.log(`running ${env} webpack config!`);
+
+// here we merge our webpack configuration files depending on the environment
+switch (env) {
+  case 'development':
+    module.exports = merged(require('./webpack/webpack.dev.config'));
+    break;
+  case 'production':
+    console.log('prod');
+    module.exports = merged(require('./webpack/webpack.prod.config'));
+    break;
+  default:
+    break;
+}
 
