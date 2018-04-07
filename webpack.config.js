@@ -1,50 +1,28 @@
+/* eslint-disable global-require */
 const path = require('path');
 const webpack = require('webpack');
-const { resolve } = require('path');
+const WebpackNotifierPlugin = require('webpack-notifier');
+const merge = require('webpack-merge');
 
-module.exports = {
-  mode: 'development',
-  entry: [
-    'babel-polyfill',
-    'react-hot-loader/patch',
-    'webpack-dev-server/client?http://localhost:8080',
-    'webpack/hot/only-dev-server',
-    './src',
-  ],
+const env = process.env.NODE_ENV;
+
+const common = {
+  // context: __dirname,
   output: {
     path: path.join(__dirname, '/dist'),
     filename: 'bundle.js',
   },
-  devServer: {
-    contentBase: resolve(__dirname, 'dist'),
-    publicPath: '/dist',
-    hot: true,
-    noInfo: false,
-    stats: { colors: true },
-    historyApiFallback: true,
-  },
+  entry: [
+    'babel-polyfill',
+    './src',
+  ],
   resolve: {
     extensions: ['.js'],
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    // new WebpackNotifierPlugin({
-    //   contentImage: path.join(__dirname, 'assets', 'imgs', 'favicon', 'favicon-196x196.png'),
-    //   excludeWarnings: true,
-    // }),
-    // new HtmlWebpackPlugin({
-    //   title: 'Medcircle',
-    //   hash: true,
-    //   filename: 'index.html',
-    //   minify: {
-    //     collapseWhitespace: true,
-    //     removeComments: true,
-    //     removeRedundantAttributes: true,
-    //     removeScriptTypeAttributes: true,
-    //     removeStyleLinkTypeAttributes: true,
-    //   },
-    //   template: path.join(__dirname, 'index.html'),
-    // }),
+    new WebpackNotifierPlugin({
+      excludeWarnings: true,
+    }),
   ],
   module: {
     rules: [
@@ -53,25 +31,26 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: ['babel-loader'],
-      },
-      {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader',
-        ],
-      },
-      {
-        test: /\.sass$|\.scss$/,
-        use: [
-          'style-loader',
-          'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
-          'sass-loader',
-          'postcss-loader',
-        ],
+        use: { loader: 'babel-loader' },
       },
     ],
   },
 };
+
+const merged = conf => merge(common, conf);
+
+console.log(`running ${env} webpack config!`);
+
+// here we merge our webpack configuration files depending on the environment
+switch (env) {
+  case 'development':
+    module.exports = merged(require('./webpack/webpack.dev.config'));
+    break;
+  case 'production':
+    console.log('prod');
+    module.exports = merged(require('./webpack/webpack.prod.config'));
+    break;
+  default:
+    break;
+}
 
