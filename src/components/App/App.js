@@ -1,25 +1,18 @@
+/* eslint-disable react/jsx-indent */ // buggy with fragment syntax
 import React, { Component } from 'react';
-import { RaisedButton, Slider } from 'material-ui';
-import { debounce } from 'lodash';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { mute, volume } from '../../api';
+import { RaisedButton } from 'material-ui';
+import { MuiThemeProvider } from 'material-ui/styles';
+import { mute, powerOff, powerOn } from '../../api';
+import VolumeControl from '../VolumeControl/VolumeControl';
 import './App.scss';
-
-const style = {
-  margin: 12,
-};
-
-/* eslint quotes: 0 */
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       isMuted: false,
-      volumeLevel: 50,
+      isOn: false,
     };
-
-    this.slideVolume = debounce(this.slideVolume, 100);
   }
 
   toggleMute = async () => {
@@ -27,31 +20,29 @@ class App extends Component {
     this.setState({ isMuted: result.mute });
   }
 
-  slideVolume = async (event, value) => {
-    console.log('slideVolume');
-    const result = await volume(value);
-    this.setState({ volumeLevel: result.volume });
+  togglePower = async () => {
+    if (this.state.isOn) {
+      await powerOff();
+      this.setState({ isOn: false });
+    } else {
+      await powerOn();
+      this.setState({ isOn: true });
+    }
   }
 
   render() {
-    const { isMuted, volumeLevel } = this.state;
-    const { toggleMute, slideVolume } = this;
+    const { isMuted, isOn } = this.state;
     return (
-      <>
-        <p styleName="text"> hello! there </p>
-        <MuiThemeProvider>
-          <RaisedButton label={isMuted ? 'On' : 'Mute'} primary style={style} onClick={toggleMute} />
-        </MuiThemeProvider>
-        <MuiThemeProvider>
-          <Slider
-            defaultValue={volumeLevel}
-            onChange={slideVolume}
-            min={0}
-            max={100}
-            styleName="slider"
-          />
-        </MuiThemeProvider>
-      </>
+      <MuiThemeProvider>
+        <div styleName="full-width">
+          <div styleName="container">
+            <RaisedButton label={isOn ? 'Power Off' : 'Power On'} primary onClick={this.togglePower} styleName="raised-button" />
+
+            <RaisedButton label={isMuted ? 'On' : 'Mute'} primary onClick={this.toggleMute} styleName="raised-button" />
+            <VolumeControl />
+          </div>
+        </div>
+      </MuiThemeProvider>
     );
   }
 }
