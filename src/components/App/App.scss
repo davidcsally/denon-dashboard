@@ -1,10 +1,14 @@
-.text {
-  color: black;
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  max-width: 600px;
+  border: 1px solid black;
 }
 
-.raised-button {
-  margin-bottom: 15px;
-  max-width: 100px;
+.power-btn {
+  margin-right: 20px;
 }
 
 .full-width {
@@ -14,10 +18,7 @@
   justify-content: center;
 }
 
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  max-width: 500px;
+.full-width-power {
+  @extend .full-width;
+  justify-content: flex-end;
 }
