@@ -3,7 +3,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
 import { RaisedButton, Slider, FloatingActionButton } from 'material-ui';
 import { debounce } from 'lodash';
-import { volume, volUp, volDown, mute } from '../../api';
+import { setVolume, volUp, volDown, mute, volStatus } from '../../api';
 
 import './VolumeControl.scss';
 
@@ -17,10 +17,17 @@ class VolumeControl extends Component {
     this.slideVolume = debounce(this.slideVolume, 100);
   }
 
+  componentDidMount() {
+    return volStatus()
+      .then((res) => {
+        const { volume } = res;
+        this.setState({ volumeLevel: volume });
+      });
+  }
+
   slideVolume = async (event, value) => {
-    const result = await volume(value);
+    const result = await setVolume(value);
     this.setState({ volumeLevel: result.volume });
-    // this.setState({ volumeLevel: value }); // testing
   }
 
   buttonVolUp = async () => {
