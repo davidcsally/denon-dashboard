@@ -1,44 +1,49 @@
 /* eslint-disable react/jsx-indent */ // buggy with fragment syntax
 import React, { Component } from 'react';
-import { RaisedButton } from 'material-ui';
+import { FloatingActionButton } from 'material-ui';
 import { MuiThemeProvider } from 'material-ui/styles';
-import { mute, powerOff, powerOn } from '../../api';
+import PowerInput from 'material-ui/svg-icons/action/power-settings-new';
+
+import { powerOff, powerOn } from '../../api';
 import VolumeControl from '../VolumeControl/VolumeControl';
+import SourceGrid from '../SourceGrid/SourceGrid';
 import './App.scss';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      isMuted: false,
       isOn: false,
     };
   }
 
-  toggleMute = async () => {
-    const result = await mute();
-    this.setState({ isMuted: result.mute });
-  }
-
   togglePower = async () => {
     if (this.state.isOn) {
-      await powerOff();
+      // await powerOff();
       this.setState({ isOn: false });
     } else {
-      await powerOn();
+      // await powerOn();
       this.setState({ isOn: true });
     }
   }
 
   render() {
-    const { isMuted, isOn } = this.state;
+    const { isOn } = this.state;
     return (
-      <MuiThemeProvider>
+      <MuiThemeProvider >
         <div styleName="full-width">
           <div styleName="container">
-            <RaisedButton label={isOn ? 'Power Off' : 'Power On'} primary onClick={this.togglePower} styleName="raised-button" />
-
-            <RaisedButton label={isMuted ? 'On' : 'Mute'} primary onClick={this.toggleMute} styleName="raised-button" />
+            <div styleName="full-width-power">
+              <FloatingActionButton
+                mini
+                onClick={this.togglePower}
+                backgroundColor={isOn ? 'green' : 'red'}
+                styleName="power-btn"
+              >
+                <PowerInput />
+              </FloatingActionButton>
+            </div>
+            <SourceGrid />
             <VolumeControl />
           </div>
         </div>
