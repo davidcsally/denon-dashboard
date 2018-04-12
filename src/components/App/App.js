@@ -3,8 +3,9 @@ import React, { Component } from 'react';
 import { FloatingActionButton } from 'material-ui';
 import { MuiThemeProvider } from 'material-ui/styles';
 import PowerInput from 'material-ui/svg-icons/action/power-settings-new';
+import { throttle } from 'lodash';
 
-import { powerOff, powerOn } from '../../api';
+import { powerOff, powerOn, powerStatus } from '../../api';
 import VolumeControl from '../VolumeControl/VolumeControl';
 import SourceGrid from '../SourceGrid/SourceGrid';
 import './App.scss';
@@ -15,15 +16,27 @@ class App extends Component {
     this.state = {
       isOn: false,
     };
+    this.togglePower = throttle(this.togglePower, 1100);
   }
 
+  componentDidMount() {
+    return powerStatus()
+      .then((res) => {
+        const { power } = res;
+        this.setState({ isOn: power });
+      });
+  }
+
+  /** TODO buggy timing issues */
   togglePower = async () => {
     if (this.state.isOn) {
-      // await powerOff();
-      this.setState({ isOn: false });
+      const result = await powerOff();
+      const { power } = result;
+      this.setState({ isOn: power });
     } else {
-      // await powerOn();
-      this.setState({ isOn: true });
+      const result = await powerOn();
+      const { power } = result;
+      this.setState({ isOn: power });
     }
   }
 
