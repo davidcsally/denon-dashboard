@@ -20,7 +20,7 @@ export const mute = async () => {
  * Returns the new volume
  * @param {number} vol
  */
-export const volume = async (vol) => {
+export const setVolume = async (vol) => {
   try {
     const response = await fetch(`http://localhost:2222/volume/${vol}`, {
       method: 'POST',
@@ -62,6 +62,16 @@ export const volDown = async () => {
   }
 };
 
+export const volStatus = async () => {
+  try {
+    const response = await fetch('http://localhost:2222/volume/');
+    const data = await response.json();
+    return data;
+  } catch (e) {
+    return console.log('[volStatus]: error: ', e);
+  }
+};
+
 /**
  * Turn the device on
  */
@@ -89,5 +99,15 @@ export const powerOff = async () => {
     return data;
   } catch (e) {
     return console.log('[powerOff]: error: ', e);
+  }
+};
+
+export const powerStatus = async () => {
+  try {
+    const response = await fetch('http://localhost:2222/power/', { method: 'GET' });
+    const data = await response.json();
+    return data;
+  } catch (e) {
+    return console.log('[powerStatus]: error');
   }
 };
